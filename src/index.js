@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
   const breedUrl = 'https://dog.ceo/api/breeds/list/all';
   const imageContainer = document.querySelector('#dog-image-container');
   const dogBreeds = document.querySelector("#dog-breeds");
+  const breedDropDown = document.querySelector('#breed-dropdown');
 
   fetch(imgUrl)
   .then(response => response.json())
@@ -33,6 +34,33 @@ document.addEventListener('DOMContentLoaded', function (e) {
     else {
       e.target.color = 'black'
     }
+  });
+
+  breedDropDown.addEventListener('change', (e) => {
+
+    // let allDogBreeds = Array.from(document.querySelectorAll("#dog-breeds li"));
+    fetch(breedUrl)
+    .then(response => response.json())
+    .then((dogBreed) => {
+      let allBreedNames = Object.keys(dogBreed.message).map((breed) => {
+          return breed
+      });
+      let filteredDogs = allBreedNames.filter((dogBreed) => {
+          return dogBreed.charAt(0).includes(e.target.value)
+      })
+      let dogs = filteredDogs.map((dog) => {
+        return `<li><font color="black">${dog}</font></li>`
+      }).join('')
+        dogBreeds.innerHTML = dogs;
+        console.log(dogs)
+        console.log(filteredDogs)
+        console.log(e.target.value)
+    });
+
+
+
+
+
   });
 
 });
